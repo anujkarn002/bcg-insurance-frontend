@@ -202,5 +202,4 @@ module.exports = {
       2: "2px",
     },
   },
-  plugins: [],
 };

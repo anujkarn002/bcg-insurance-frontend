@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { useQuery } from "react-query";
 import { getPoliciesStat, getPolicies } from "../lib/request";
 import Button from "../components/Button";
@@ -9,41 +11,29 @@ import Spinner from "../components/Spinner";
 import { PolicyGraph } from "./PolicyStat";
 import { PolicyList } from "./PolicyList";
 
-const dateTimeOpts = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-  hour: "numeric",
-  minute: "numeric",
-  hour12: true,
-};
-
-const timeOpts = {
-  hour: "numeric",
-  minute: "numeric",
-  hour12: true,
-};
-
-const dateOpts = {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-};
+const regions = [
+  { value: "", name: "Select Region" },
+  { value: "east", name: "East" },
+  { value: "west", name: "West" },
+  { value: "north", name: "North" },
+  { value: "south", name: "South" },
+];
 
 export const Policies = ({}) => {
+  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [q, setQ] = useState('');
-  const [region, setRegion] = useState('');
+  const [q, setQ] = useState("");
+  const [region, setRegion] = useState("");
 
   const setSearchTerm = ({ currentTarget: { value } }) => setQ(value);
 
-  const fetchPolicies = async (p = 1, ps = 10, q = '') =>
+  const fetchPolicies = async (p = 1, ps = 10, q = "") =>
     await (
       await getPolicies(p, ps, q)
     ).data;
 
-  const fetchPoliciesStat = async (region = '') =>
+  const fetchPoliciesStat = async (region = "") =>
     await (
       await getPoliciesStat(region)
     ).data;
@@ -99,19 +89,22 @@ export const Policies = ({}) => {
               <text>Showing fetched records</text>
             </div>
             <div className="flex flex-row flex-nowrap gap-4">
-              <SearchBar className="mb-2" onChange={setSearchTerm} />
-              <Button
-                onClick={() => {
-                  setFromDate(
-                    new Date(new Date().setDate(new Date().getDate() - 7))
-                      .toISOString()
-                      .replace(/T.+/, "")
-                  );
-                  setDataTimeText("Showing weekly data..");
-                }}
-              >
-                Weekly
-              </Button>
+              {tab === 1 ? (
+                <select
+                  name="select"
+                  onChange={(e) => setRegion(e.target.value)}
+                >
+                  {regions.map(function (n) {
+                    return (
+                      <option value={n.value} selected={region === n.value}>
+                        {n.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              ) : (
+                <SearchBar className="mb-2" onChange={setSearchTerm} />
+              )}
             </div>
           </div>
 
@@ -161,21 +154,25 @@ export const Policies = ({}) => {
                 </div>
               </div>
               {/* Tabs */}
-              <div className="w-full mt-4 hidden">
-                <div className="flex flex-row justify-end items-center">
-                  <div className="h-12 w-12">
-                    {isPoliciesLoading ? <Spinner /> : <></>}
-                  </div>
-                  <div>
-                    <Pagination
-                      totalResults={policies?.count ?? 0}
-                      resultsPerPage={pageSize}
-                      onChange={(p) => setPage(p)}
-                      label="Policies pagination"
-                    />
+              {tab === 0 ? (
+                <div className="w-full mt-4 hidden">
+                  <div className="flex flex-row justify-end items-center">
+                    <div className="h-12 w-12">
+                      {isPoliciesLoading ? <Spinner /> : <></>}
+                    </div>
+                    <div>
+                      <Pagination
+                        totalResults={policies?.count ?? 0}
+                        resultsPerPage={pageSize}
+                        onChange={(p) => setPage(p)}
+                        label="Policies pagination"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <></>
+              )}
             </>
           ) : (
             <></>

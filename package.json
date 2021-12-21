@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.2",
+    "@heroicons/react": "^1.0.5",
     "@tailwindcss/line-clamp": "^0.3.0",
     "axios": "^0.24.0",
     "isomorphic-fetch": "^3.0.0",

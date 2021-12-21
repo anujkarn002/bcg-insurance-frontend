@@ -4,6 +4,7 @@ import { FaUsers } from "react-icons/fa";
 import { useQuery } from "react-query";
 import { getPolicies } from "../lib/request";
 import Pagination from "../components/Pagination";
+import moment from "moment";
 
 const dateTimeOpts = {
   year: "numeric",
@@ -21,34 +22,44 @@ const PolicyRow = ({ policy, pos }) => {
       className="cursor-pointer border-b border-primary-300 hover:shadow-lg"
       onClick={() => push(`/policies/${policy?.id}`)}
     >
-      <td className="py-3 px-6  text-left whitespace-nowrap">
+      <td className="py-2 px-2 ">
         <text>{policy?.id}</text>
       </td>
-      <td className="py-3 px-6 text-left whitespace-nowrap">
-        <p>
-          {new Date(policy?.datePurchased).toLocaleString(
-            "en-US",
-            dateTimeOpts
-          )}
-        </p>
+      <td className="py-3 px-2  whitespace-nowrap">
+          {moment(policy?.datePurchased).format("MMM Do YYYY")}
       </td>
-      <td className="py-3 px-6 text-left">
+      <td className="py-2 px-2 ">
         <text>{policy?.customer.id}</text>
       </td>
-      <td className="py-3 px-6 text-center">
+      <td className="py-2 px-2 ">
         <text>{policy?.vehicle.fuelType ?? `----------`}</text>
       </td>
-      <td className="py-3 px-6 text-center">
+      <td className="py-2 px-2 ">
         <span className="bg-purple-200 text-purple-600 py-1 px-3 rounded-full">
           {policy?.vehicle.segment ?? `--`}
         </span>
       </td>
-      <td className="py-3 px-6 text-center">
+      <td className="py-2 px-2 ">
         <span className="bg-purple-200 text-purple-600 py-1 px-3 rounded-full">
           ${policy?.premium}
         </span>
       </td>
-      <td className="py-3 px-6 text-center">
+      <td className="py-2 px-2 ">
+        <span className="bg-purple-200 text-purple-600 py-1 px-3 rounded-full">
+          {policy?.customer.gender}
+        </span>
+      </td>
+      <td className="py-2 px-2 ">
+        <span className="bg-purple-200 text-purple-600 py-1 px-3 rounded-full">
+          {policy?.customer.incomeGroup}
+        </span>
+      </td>
+      <td className="py-2 px-2 ">
+        <span className="bg-purple-200 text-purple-600 py-1 px-3 rounded-full">
+          {policy?.customerIsMarried ? `Yes` : `No`}
+        </span>
+      </td>
+      <td className="py-3 px-2 ">
         <div className="flex item-center justify-center">
           <div className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
             <svg
@@ -61,43 +72,7 @@ const PolicyRow = ({ policy, pos }) => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-          </div>
-          <div className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
                 d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-              />
-            </svg>
-          </div>
-          <div className="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
           </div>
@@ -138,13 +113,16 @@ export const PolicyList = ({data}) => {
           <table className="min-w-max w-full table-auto">
             <thead>
               <tr className="bg-primary-200 text-gray-600 uppercase text-md leading-normal">
-                <th className="py-3 px-6 text-left"># ID</th>
-                <th className="py-3 px-6 text-left">Date Of Purchase</th>
-                <th className="py-3 px-6 text-left">Customer ID</th>
-                <th className="py-3 px-6 text-center">Fuel</th>
-                <th className="py-3 px-6 text-center">Vehicle Segment</th>
-                <th className="py-3 px-6 text-center">Premium</th>
-                <th className="py-3 px-6 text-center">Actions</th>
+                <th className="py-3 px-2"># ID</th>
+                <th className="py-3 px-2">Date Of Purchase</th>
+                <th className="py-3 px-2">Customer ID</th>
+                <th className="py-3 px-2">Fuel</th>
+                <th className="py-3 px-2">Vehicle Segment</th>
+                <th className="py-3 px-2">Premium</th>
+                <th className="py-3 px-2">Customer Gender</th>
+                <th className="py-3 px-2">Customer Income Group</th>
+                <th className="py-3 px-2">Marital Status</th>
+                <th className="py-3 px-2">Action</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 text-md font-light">
