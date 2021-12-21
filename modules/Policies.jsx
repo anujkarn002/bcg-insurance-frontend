@@ -103,7 +103,7 @@ export const Policies = ({}) => {
                   })}
                 </select>
               ) : (
-                <SearchBar className="mb-2" onChange={setSearchTerm} placeholder="Policy ID or Customer ID" />
+                <SearchBar className="mb-2" onChange={setSearchTerm} placeholder="Policy ID or Customer ID" value={q} />
               )}
             </div>
           </div>
