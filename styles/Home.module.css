@@ -17,6 +17,14 @@
   align-items: center;
 }
 
+.box {
+  padding: 5rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .footer {
   width: 100%;
   height: 100px;
